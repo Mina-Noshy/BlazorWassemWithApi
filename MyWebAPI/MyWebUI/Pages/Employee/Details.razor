@@ -1,0 +1,68 @@
+﻿@page "/employee/details/{id}"
+
+<div class="text-center">
+    <h4>Employee Details</h4>
+</div>
+
+@if (_employee == null)
+{
+    <Loading Title="Emolyee Details" Message="please wait..."></Loading>
+}
+else
+{
+
+    <div>
+        <h5>Employee</h5>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Name
+            </dt>
+            <dd class="col-sm-10">
+                @_employee.name
+            </dd>
+            <dt class="col-sm-2">
+                Department
+            </dt>
+            <dd class="col-sm-10">
+                @_employee.department
+            </dd>
+            <dt class="col-sm-2">
+                Phone
+            </dt>
+            <dd class="col-sm-10">
+                @_employee.phone
+            </dd>
+            <dt class="col-sm-2">
+                Job
+            </dt>
+            <dd class="col-sm-10">
+                @_employee.job
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a href="/employee/list" class="btn btn-primary">Back</a>
+        <a href="@($"/employee/edit/{_employee.id}")" class="btn btn-success">Edit</a>
+        <a href="@($"/employee/delete/{_employee.id}")" class="btn btn-danger">Delete</a>
+    </div>
+}
+
+@code {
+
+    [Inject]
+    public IEmployeeService _service { get; set; }
+
+    public Employee _employee { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _employee = await _service.Find(int.Parse(Id));
+    }
+
+}

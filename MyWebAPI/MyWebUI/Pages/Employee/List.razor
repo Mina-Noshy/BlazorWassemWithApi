@@ -1,0 +1,66 @@
+﻿@page "/employee/list"
+
+<div class="text-center">
+    <h4>Employees List</h4>
+</div>
+
+@if (_employees == null)
+{
+    <Loading Title="Emolyees List" Message="please wait..." ></Loading>
+}
+else
+{
+<div style="margin-bottom:10px;">
+    <a href="/employee/create" class="btn btn-success">Create new</a>
+</div>
+
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>department</th>
+                <th>phone</th>
+                <th>job</th>
+                <th></th>
+                <th>options</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in _employees)
+            {
+            <tr>
+                <td>@item.id</td>
+                <td>@item.name</td>
+                <td>@item.department</td>
+                <td>@item.phone</td>
+                <td>@item.job</td>
+                <td>
+                    <a href="@($"/employee/details/{item.id}")" class="btn-sm btn-primary">view</a>
+                </td>
+                <td>
+                    <a href="@($"/employee/edit/{item.id}")" class="btn-sm btn-success">edit</a>
+                </td>
+                <td>
+                    <a href="@($"/employee/delete/{item.id}")" class="btn-sm btn-danger">delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    [Inject]
+    public IEmployeeService _service { get; set; }
+
+    private IEnumerable<Employee> _employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _employees = await _service.GetAll();
+    }
+
+}

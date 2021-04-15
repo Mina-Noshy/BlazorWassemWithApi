@@ -1,0 +1,15 @@
+﻿
+<div class="text-center alert alert-primary" style="font-family: 'Zen Dots', cursive;">
+    <h3>@Title</h3>
+    <p>
+        <i class="fa fa-spinner fa-spin"></i> @Message
+    </p>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public string Message { get; set; }
+}

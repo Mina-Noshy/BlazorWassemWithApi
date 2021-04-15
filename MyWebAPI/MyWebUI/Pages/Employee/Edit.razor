@@ -1,0 +1,99 @@
+﻿@page "/employee/edit/{id}"
+
+<div class="text-center">
+    <h4>Edit Employee</h4>
+</div>
+
+@if (_employee == null)
+{
+    <Loading Title="Edit Emolyee" Message="please wait..."></Loading>
+}
+else
+{
+<EditForm Model="@_employee" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <h3>Edit Employee</h3>
+    <hr />
+    <ValidationSummary />
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Name
+        </label>
+        <div class="col-sm-10">
+            <InputText id="name" class="form-control" placeholder="employee name"
+                       @bind-Value="_employee.name">
+                <ValidationMessage For="@(() => _employee.name)" />
+            </InputText>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Department
+        </label>
+        <div class="col-sm-10">
+            <InputText id="department" class="form-control" placeholder="department"
+                       @bind-Value="_employee.department">
+                <ValidationMessage For="@(() => _employee.department)" />
+            </InputText>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Phone
+        </label>
+        <div class="col-sm-10">
+            <InputText id="phone" class="form-control" placeholder="phone"
+                       @bind-Value="_employee.phone">
+                <ValidationMessage For="@(() => _employee.phone)" />
+            </InputText>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Job
+        </label>
+        <div class="col-sm-10">
+            <InputText id="job" class="form-control" placeholder="job"
+                       @bind-Value="_employee.job">
+                <ValidationMessage For="@(() => _employee.job)" />
+            </InputText>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="/employee/list" class="btn btn-primary">Cancel</a>
+    </div>
+</EditForm>
+}
+
+@code {
+
+    [Inject]
+    public IEmployeeService _service { get; set; }
+
+    [Inject]
+    public NavigationManager _navigation { get; set; }
+
+    public Employee _employee { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _employee = await _service.Find(int.Parse(Id));
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await _service.Update(_employee);
+        _navigation.NavigateTo("/employee/list");
+    }
+
+}
